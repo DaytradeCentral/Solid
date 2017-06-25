@@ -81,7 +81,7 @@ class HarmonySearch:
         :return: None
         """
         self.cur_steps = 0
-        self.memory = list([self._random_harmony() for _ in range(self.hms)])
+        self.memory = [self._random_harmony() for _ in range(self.hms)]
         self.scores = None
 
     @abstractmethod
@@ -109,7 +109,7 @@ class HarmonySearch:
 
         :return: None
         """
-        self.scores = list([self._score(x) for x in self.memory])
+        self.scores = [self._score(x) for x in self.memory]
 
     def _worst_score(self):
         """

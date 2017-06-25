@@ -15,5 +15,5 @@ class Algorithm(SimulatedAnnealing):
 
 
 def test_algorithm():
-    algorithm = Algorithm(list([uniform(0, 1) for _ in range(5)]), 5, .99, 5000)
+    algorithm = Algorithm([uniform(0, 1) for _ in range(5)], 5, .99, 5000)
     algorithm.run()

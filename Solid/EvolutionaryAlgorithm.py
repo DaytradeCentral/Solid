@@ -105,7 +105,7 @@ class EvolutionaryAlgorithm:
 
         :return: None
         """
-        self.fitnesses = list([self._fitness(x) for x in self.population])
+        self.fitnesses = [self._fitness(x) for x in self.population]
 
     def _most_fit(self):
         """
@@ -132,7 +132,7 @@ class EvolutionaryAlgorithm:
         shuffle(self.population)
         total_fitness = sum(self.fitnesses)
         if total_fitness != 0:
-            probs = list([self._fitness(x) / total_fitness for x in self.population])
+            probs = [self._fitness(x) / total_fitness for x in self.population]
         else:
             return self.population[0:n]
         res = []
@@ -193,7 +193,7 @@ class EvolutionaryAlgorithm:
             for _ in range(num_crossover):
                 self.population.append(self._crossover(*parents))
 
-            self.population = list([self._mutate(x) for x in self.population])
+            self.population = [self._mutate(x) for x in self.population]
             self._populate_fitness()
 
             best_member, best_fitness = self._most_fit()

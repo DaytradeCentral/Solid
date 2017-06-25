@@ -7,7 +7,7 @@ class Algorithm(GeneticAlgorithm):
     Tries to get a randomly-generated string to match 000111
     """
     def _initial_population(self):
-        return list(list([choice([0, 1]) for _ in range(6)]) for _ in range(50))
+        return list([choice([0, 1]) for _ in range(6)] for _ in range(50))
 
     def _fitness(self, member):
         return float(sum(member[i] == [0,0,0,1,1,1][i] for i in range(6)))

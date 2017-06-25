@@ -15,5 +15,5 @@ class Algorithm(StochasticHillClimb):
 
 
 def test_algorithm():
-    algorithm = Algorithm(list([uniform(0, 1) for _ in range(5)]), .01, 1000)
+    algorithm = Algorithm([uniform(0, 1) for _ in range(5)], .01, 1000)
     algorithm.run()
