@@ -32,7 +32,7 @@ class EvolutionaryAlgorithm:
         :param max_fitness: fitness value to stop algorithm once reached
         """
         if isinstance(crossover_rate, float):
-            if crossover_rate >= 0 and crossover_rate <= 1:
+            if 0 <= crossover_rate <= 1:
                 self.crossover_rate = crossover_rate
             else:
                 raise ValueError('Crossover rate must be a float between 0 and 1')
@@ -40,7 +40,7 @@ class EvolutionaryAlgorithm:
             raise ValueError('Crossover rate must be a float between 0 and 1')
 
         if isinstance(mutation_rate, float):
-            if mutation_rate >= 0 and mutation_rate <= 1:
+            if 0 <= mutation_rate <= 1:
                 self.mutation_rate = mutation_rate
             else:
                 raise ValueError('Mutation rate must be a float between 0 and 1')
