@@ -1,7 +1,7 @@
 from random import choice, randint, random
 from string import lowercase
 from Solid.EvolutionaryAlgorithm import EvolutionaryAlgorithm
-
+from unittest import TestCase, main
 
 class Algorithm(EvolutionaryAlgorithm):
     """
@@ -24,7 +24,10 @@ class Algorithm(EvolutionaryAlgorithm):
             member = ''.join(member)
         return member
 
+class TestEvolutionaryAlgorithm(TestCase):
+    def test_algorithm(_):
+        algorithm = Algorithm(.5, .7, 500, max_fitness=None)
+        algorithm.run()
 
-def test_algorithm():
-    algorithm = Algorithm(.5, .7, 500, max_fitness=None)
-    algorithm.run()
+if __name__ == '__main__':
+    main()
