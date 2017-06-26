@@ -9,18 +9,6 @@ class EvolutionaryAlgorithm:
     """
     __metaclass__ = ABCMeta
 
-    population = None
-    fitnesses = None
-
-    crossover_rate = None
-
-    mutation_rate = None
-
-    cur_steps = None
-    best_fitness = None
-    best_member = None
-
-    max_steps = None
     max_fitness = None
 
     def __init__(self, crossover_rate, mutation_rate, max_steps, max_fitness=None):
