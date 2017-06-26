@@ -1,9 +1,10 @@
-from __future__ import print_function
+from __future__ import division, print_function
 from six import add_metaclass
 
 from abc import ABCMeta, abstractmethod
 from copy import deepcopy
 from random import random, shuffle
+from numpy.random import choice
 
 from logging import getLogger
 logger = getLogger(__name__)
@@ -14,8 +15,6 @@ class EvolutionaryAlgorithm:
     Conducts evolutionary algorithm
     """
 
-    max_fitness = None
-
     def __init__(self, crossover_rate, mutation_rate, max_steps, max_fitness=None):
         """
 
@@ -24,19 +23,13 @@ class EvolutionaryAlgorithm:
         :param max_steps: maximum steps to run genetic algorithm for
         :param max_fitness: fitness value to stop algorithm once reached
         """
-        if isinstance(crossover_rate, float):
-            if 0 <= crossover_rate <= 1:
-                self.crossover_rate = crossover_rate
-            else:
-                raise ValueError('Crossover rate must be a float between 0 and 1')
+        if isinstance(crossover_rate, float) and 0 <= crossover_rate <= 1:
+            self.crossover_rate = crossover_rate
         else:
             raise ValueError('Crossover rate must be a float between 0 and 1')
 
-        if isinstance(mutation_rate, float):
-            if 0 <= mutation_rate <= 1:
-                self.mutation_rate = mutation_rate
-            else:
-                raise ValueError('Mutation rate must be a float between 0 and 1')
+        if isinstance(mutation_rate, float) and 0 <= mutation_rate <= 1:
+            self.mutation_rate = mutation_rate
         else:
             raise ValueError('Mutation rate must be a float between 0 and 1')
 
@@ -45,11 +38,10 @@ class EvolutionaryAlgorithm:
         else:
             raise ValueError('Maximum steps must be a positive integer')
 
-        if max_fitness is not None:
-            if isinstance(max_fitness, (int, float)):
-                self.max_fitness = float(max_fitness)
-            else:
-                raise ValueError('Maximum fitness must be a numeric type')
+        if max_fitness is None or isinstance(max_fitness, (int, float)):
+            self.max_fitness = max_fitness
+        else:
+            raise ValueError('Maximum fitness must be a numeric type')
 
     def status(self):
         return ('{self.__class__.__name__}:\n'
@@ -125,22 +117,11 @@ class EvolutionaryAlgorithm:
         :param n: number of members to select
         :return: n members
         """
-        shuffle(self.population)
         total_fitness = sum(self.fitnesses)
-        if total_fitness != 0:
-            probs = [self._fitness(x) / total_fitness for x in self.population]
-        else:
-            return self.population[0:n]
-        res = []
-        for _ in range(n):
-            r = random()
-            sum_ = 0
-            for i, x in enumerate(probs):
-                sum_ += probs[i]
-                if r <= sum_:
-                    res.append(deepcopy(self.population[i]))
-                    break
-        return res
+        if total_fitness == 0:
+            return self.population[:n]
+        probs = [x/total_fitness for x in self.fitnesses]
+        return list(choice(self.population, size=n, p=probs))
 
     @abstractmethod
     def _crossover(self, parent1, parent2):
@@ -179,7 +160,7 @@ class EvolutionaryAlgorithm:
             self.cur_steps += 1
 
             if (i + 1) % 100 == 0:
-                logger.info(self)
+                logger.info(self.status())
 
             self.population = self._select_n(num_copy)
             self._populate_fitness()
