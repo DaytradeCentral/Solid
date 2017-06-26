@@ -4,6 +4,7 @@ from six import add_metaclass
 from abc import ABCMeta, abstractmethod
 from copy import deepcopy
 from random import random, shuffle
+from numpy import argmax
 from numpy.random import choice
 
 from logging import getLogger
@@ -101,13 +102,8 @@ class EvolutionaryAlgorithm:
 
         :return: most fit member and most fit member's fitness
         """
-        best_idx = 0
-        cur_idx = 0
-        for x in self.fitnesses:
-            if x > self.fitnesses[best_idx]:
-                best_idx = cur_idx
-            cur_idx += 1
-        return self.population[best_idx], self.fitnesses[best_idx]
+        best = argmax(self.fitnesses)
+        return self.population[best], self.fitnesses[best]
 
     def _select_n(self, n):
         """
@@ -157,7 +153,7 @@ class EvolutionaryAlgorithm:
         num_copy = max(int((1 - self.crossover_rate) * len(self.population)), 2)
         num_crossover = len(self.population) - num_copy
         for i in range(self.max_steps):
-            self.cur_steps += 1
+            self.cur_steps = i
 
             if (i + 1) % 100 == 0:
                 logger.info(self.status())
