@@ -30,4 +30,6 @@ class TestEvolutionaryAlgorithm(TestCase):
         algorithm.run()
 
 if __name__ == '__main__':
+    from logging import basicConfig, INFO
+    basicConfig(level=INFO)
     main()

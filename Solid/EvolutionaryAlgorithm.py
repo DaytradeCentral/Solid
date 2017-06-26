@@ -5,6 +5,9 @@ from abc import ABCMeta, abstractmethod
 from copy import deepcopy
 from random import random, shuffle
 
+from logging import getLogger
+logger = getLogger(__name__)
+
 @add_metaclass(ABCMeta)
 class EvolutionaryAlgorithm:
     """
@@ -48,15 +51,18 @@ class EvolutionaryAlgorithm:
             else:
                 raise ValueError('Maximum fitness must be a numeric type')
 
-    def __str__(self):
-        return ('EVOLUTIONARY ALGORITHM: \n' +
-                'CURRENT STEPS: %d \n' +
-                'BEST FITNESS: %f \n' +
-                'BEST MEMBER: %s \n\n') % \
-               (self.cur_steps, self.best_fitness, str(self.best_member))
+    def status(self):
+        return ('{self.__class__.__name__}:\n'
+                'step:         {self.cur_steps}\n'
+                'best fitness: {self.best_fitness}\n'
+                'best member:  {self.best_member}').format(self=self)
 
     def __repr__(self):
-        return self.__str__()
+        return ('{self.__class__.__name__}('
+                '{self.crossover_rate!r}, '
+                '{self.mutation_rate!r}, '
+                '{self.max_steps!r}, '
+                '{self.max_fitness!r})').format(self=self)
 
     def _clear(self):
         """
@@ -157,11 +163,10 @@ class EvolutionaryAlgorithm:
         """
         pass
 
-    def run(self, verbose=True):
+    def run(self):
         """
         Conducts evolutionary algorithm
 
-        :param verbose: indicates whether or not to print progress regularly
         :return: best state and best objective function value
         """
         self._clear()
@@ -173,8 +178,8 @@ class EvolutionaryAlgorithm:
         for i in range(self.max_steps):
             self.cur_steps += 1
 
-            if ((i + 1) % 100 == 0) and verbose:
-                print(self)
+            if (i + 1) % 100 == 0:
+                logger.info(self)
 
             self.population = self._select_n(num_copy)
             self._populate_fitness()
@@ -192,7 +197,7 @@ class EvolutionaryAlgorithm:
                 self.best_member = deepcopy(best_member)
 
             if self.max_fitness is not None and self.best_fitness >= self.max_fitness:
-                print("TERMINATING - REACHED MAXIMUM FITNESS")
+                logger.info("TERMINATING - REACHED MAXIMUM FITNESS")
                 return self.best_member, self.best_fitness
-        print("TERMINATING - REACHED MAXIMUM STEPS")
+        logger.info("TERMINATING - REACHED MAXIMUM STEPS")
         return self.best_member, self.best_fitness
